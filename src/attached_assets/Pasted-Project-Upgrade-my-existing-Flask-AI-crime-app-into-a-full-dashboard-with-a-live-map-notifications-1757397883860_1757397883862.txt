@@ -1,0 +1,65 @@
+Project: Upgrade my existing Flask AI crime app into a full dashboard with a live map, notifications, and statistics. Use my existing files (model_utils.py, langgraph_nodes.py, etc.).
+
+Core Goal: Use Python (Flask & Jinja2) to serve a complete HTML page with data. Add a MySQL database. JavaScript is only for map interactivity, the chart, and the report form's geolocation.
+
+Step 1: Database Setup (Python)
+
+Add flask-sqlalchemy and pymysql to requirements.txt.
+
+Create models.py with a CrimeReport model. Fields: id, original_text, predicted_label, confidence, trust_score, latitude, longitude, category, timestamp.
+
+Step 2: Modify Flask Routes in app.py (Python)
+
+CHANGE the / route: It should no longer just return a simple form. It must:
+
+Query the CrimeReport database for all verified reports.
+
+Calculate statistics (counts by category) for the chart.
+
+Render a new templates/index.html template, passing the reports and statistics data directly to the template.
+
+python
+@app.route('/')
+def home():
+    verified_reports = CrimeReport.query.filter(CrimeReport.trust_score > 0.5).all()
+    # Calculate stats for the chart (Python logic)
+    stats = calculate_stats(verified_reports) # {'Theft': 5, 'Assault': 10}
+    return render_template('index.html', reports=verified_reports, statistics=stats)
+KEEP the /api/process endpoint: It will still handle form submissions and save verified reports to the database.
+
+Step 3: New Frontend (templates/index.html) - Uses Jinja2
+
+This file will be a full HTML page with sections for the map, sidebar, and chart.
+
+Map Section: The Leaflet map will be initialized. Instead of using JavaScript to fetch /api/reports, we will use Jinja2 to inject the report data directly into the HTML/JS.
+
+html
+<script>
+    // Python data is passed directly to JavaScript here
+    var reportData = {{ reports | tojson }};
+    // Now use reportData to add markers to the Leaflet map
+</script>
+Notification Sidebar: Use a Jinja2 for loop to display the list of reports passed from the home() route.
+
+html
+<div class="sidebar">
+    <h3>Recent Verified Alerts</h3>
+    {% for report in reports %}
+    <div class="alert-item">{{ report.category }} - {{ report.timestamp }}</div>
+    {% endfor %}
+</div>
+Statistics Section: Use Jinja2 to pass the statistics data to the Chart.js initialization.
+
+html
+<script>
+    var chartData = {
+        labels: {{ statistics.keys() | list | tojson }},
+        data: {{ statistics.values() | list | tojson }}
+    };
+    // Now use chartData to render the Chart.js pie chart
+</script>
+Report Button & Modal: The modal will use a small amount of JavaScript only to get the user's GPS location and display it. The form submission will be handled by your existing Flask backend.
+
+Summary: The key change is that the main dashboard page (/) is rendered server-side. All data (reports for the map/sidebar, stats for the chart) is fetched from the database in Python and passed directly to the template using Jinja2, eliminating the need for JavaScript to fetch data from APIs on page load.
+
+Please generate the code for this Python-centric approach: the new models.py, the modified app.py routes, and the new templates/index.html using Jinja2 to display the data.

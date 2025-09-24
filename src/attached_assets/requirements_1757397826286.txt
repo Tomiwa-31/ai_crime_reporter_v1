@@ -1,0 +1,9 @@
+
+transformers>=4.56.0
+torch>=2.0.0
+langgraph>=0.6.0
+flask>=3.0.0
+requests>=2.32.0
+geopy>=2.4.0
+python-dotenv>=1.0.0
+huggingface-hub>=0.34.0

@@ -15,7 +15,7 @@ def user_input_node(state: AlertFilterState):
     
     # If GPS coordinates are provided (not default), use them
     if state["gps_location"] != (0.0, 0.0):
-        print(f"📱 Using GPS coordinates: {state['gps_location']}")
+        print(f" Using GPS coordinates: {state['gps_location']}")
         return state
     
     # Otherwise, try to extract from text
@@ -23,11 +23,11 @@ def user_input_node(state: AlertFilterState):
     
     if extracted_coords:
         state["gps_location"] = extracted_coords
-        print(f"📍 Extracted coordinates from text: {extracted_coords}")
+        print(f" Extracted coordinates from text: {extracted_coords}")
     else:
         # Default to Lagos coordinates if extraction fails
         state["gps_location"] = (6.6018, 3.3515)
-        print("⚠️ No location found, using default coordinates (Lagos)")
+        print(" No location found, using default coordinates (Lagos)")
     
     return state
 
@@ -37,7 +37,7 @@ def validation_node(state: AlertFilterState):
     state['alert_type'] = result['predicted_label']
     state['trust_score'] = result['trust_score']
     
-    print(f"🤖 AI Classification: {result['predicted_label']} (trust: {result['trust_score']:.2f})")
+    print(f"AI Classification: {result['predicted_label']} (trust: {result['trust_score']:.2f})")
     return state
 
 def geo_verification_node(state: AlertFilterState):
@@ -47,16 +47,16 @@ def geo_verification_node(state: AlertFilterState):
     
     # Skip verification if using default coordinates
     if extracted_coords == (6.6018, 3.3515):
-        print("⏭️ Skipping geo verification for default coordinates")
+        print(" Skipping geo verification for default coordinates")
         return state
     
     second_extraction = get_coordinates_from_text(report_text)
     if second_extraction:
         distance_km = geodesic(extracted_coords, second_extraction).km
-        print(f"🔍 Location consistency: {distance_km:.2f} km difference")
+        print(f" Location consistency: {distance_km:.2f} km difference")
         
         if distance_km > 50:
-            print("⚠️ Inconsistent location - penalizing trust")
+            print(" Inconsistent location - penalizing trust")
             state["trust_score"] *= 0.8
         else:
             print("✅ Location verified")

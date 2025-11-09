@@ -1,4 +1,5 @@
 AI Crime Reporter with LangGraph
+
 An intelligent crime reporting system that uses AI to verify and classify crime reports in real-time. Built with LangGraph, BERT, and Flask, deployed on Hugging Face Spaces.
 
  Features
@@ -13,6 +14,7 @@ Intelligent Filtering: Trust-based report validation and display
 Production-Ready: Full-stack application with robust error handling
 
 🏗️ System Architecture
+
 Data & Model Pipeline
 Dataset: 220 crime reports (70% train, 15% validation, 15% test)
 
@@ -25,6 +27,7 @@ Training: 10 epochs, 2e-4 learning rate, 8 batch size
 Performance: 0.093 final loss with Accuracy + ROC AUC metrics
 
 LangGraph Workflow
+
 Location Intelligence: GPS priority with text extraction fallback
 
 AI Classification: BERT model predicts label + trust score
@@ -61,8 +64,13 @@ Geolocation: Browser Geolocation API, Geopy
 
 📊 Key Achievements
 Seamless AI-Backend Integration - LangGraph workflows in Flask routes
+
 Real-time Data Processing - Instant AI analysis with trust scoring
+
 Intelligent Filtering - Multi-level trust-based validation
+
 Production Resilience - Comprehensive error handling and logging
+
 RESTful API Design - Clean JSON endpoints for frontend communication
+
 Database Optimization - Efficient queries with connection pooling
